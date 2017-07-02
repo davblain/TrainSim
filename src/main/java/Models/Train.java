@@ -27,10 +27,8 @@ public class Train extends Observable  implements Runnable{
     private Platform nextPlatform;
     public void run() {
         int i=0;
-        nextPlatform = platforms.get(0);
-        addObserver(nextPlatform);
-        while (true)
-        {
+        while (true) {
+            distToNextCity = distBetweenCities;
             nextPlatform = platforms.get(i%platforms.size());
             addObserver(nextPlatform);
             currSpeed = 0;
@@ -52,6 +50,7 @@ public class Train extends Observable  implements Runnable{
                         deleteObserver(nextPlatform);
                         break;
                     }
+                    distToNextCity-=currSpeed;
 
                 } else { // кейс с близким расстоянием до следующего поезда
                     currSpeed = 0;
