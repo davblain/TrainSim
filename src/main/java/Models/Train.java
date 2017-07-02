@@ -14,17 +14,16 @@ public class Train extends Observable  implements Runnable{
     private static Integer acceleration;
     private static Integer dellay;
     private static Integer disToNotificate;
+    private static Integer distBetweenCities;
     private ArrayList<Platform> platforms;
     private LinkedList<Person> personsOnTrain;
     private Train nextTrain;
-    private Train prevTrain;
     private Integer currSpeed;
     private Integer numberOfWagons;
     private Integer allDist ;
     private Integer distToNextCity ;
     private Boolean canMove;
     private Boolean onStation;
-
     private Platform nextPlatform;
     public void run() {
         int i=0;
@@ -34,13 +33,13 @@ public class Train extends Observable  implements Runnable{
         {
             nextPlatform = platforms.get(i%platforms.size());
             addObserver(nextPlatform);
+            currSpeed = 0;
             while (!onStation) {
                 Integer distToNextTrain = getDistToNextTrain();
                 if (!(nextTrain.onStation && distToNextTrain < disToNotificate) && getDistToNextTrain() > minDist ) {
                     if (currSpeed<speed) currSpeed+=acceleration; else currSpeed=speed;
-
                     allDist += currSpeed;
-                    if (distToNextCity<0) {
+                    if (distToNextCity < 0) {
                         notifyObservers();
                         while (onStation) {
                             try {
@@ -54,16 +53,17 @@ public class Train extends Observable  implements Runnable{
                         break;
                     }
 
-                } else if (getDistToNextTrain() < minDist) {
-                    try {
-                        Thread.sleep(dellay);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                } else { // кейс с близким расстоянием до следующего поезда
+                    currSpeed = 0;
+                    if (getDistToNextTrain() < minDist) {
+                        try {
+                            Thread.sleep(dellay);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
                     }
-
                 }
-
-
 
 
 
