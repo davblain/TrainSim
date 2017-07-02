@@ -35,6 +35,7 @@ public class Wagon {
             executorService.submit(() -> personsInWagon.forEach(person -> {
                 if (person.inThisCity(city)) {
                     city.getPersonsInCity().add(person);
+                    person.setCurrCity(city);
                     personsInWagon.remove(person);
                     try {
                         Thread.sleep(person.getLoadingDellay());

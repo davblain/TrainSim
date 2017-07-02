@@ -1,5 +1,8 @@
 package Models;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  * Created by Gemini on 01.07.2017.
  */
@@ -10,11 +13,36 @@ public class Person {
     private City nextCity;
     private Integer loadingDellay;
     private Integer unloadingDellay;
+    private ArrayList<City> cities;
+
+    public ArrayList<City> getCities() {
+        return cities;
+    }
+
+    public void setCities(ArrayList<City> cities) {
+        this.cities = cities;
+    }
 
     public Integer getLoadingDellay() {
         return loadingDellay;
     }
+    public void setRandom() {
+        final Random random = new Random();
+        if (random.nextFloat()<0.5){
+            Want = true;
+            City randomCity = cities.get(random.nextInt(cities.size()));
+            while (randomCity==currCity) {
+                randomCity = cities.get(random.nextInt(cities.size()));
+            }
+            nextCity = cities.get(random.nextInt(cities.size()));
 
+        } else {
+            Want = false;
+            nextCity = null;
+        }
+
+
+    }
     public void setLoadingDellay(Integer loadingDellay) {
         this.loadingDellay = loadingDellay;
     }

@@ -12,7 +12,7 @@ public class City implements Runnable {
 
     public void run() {
         while (true) {
-
+           personsInCity.forEach(Person::setRandom);
             personsInCity.stream().filter(Person::getWant).forEach(p -> {
                 platform.getPersonsOnPlatform().add(p);
                 personsInCity.remove(p);

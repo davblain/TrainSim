@@ -15,6 +15,7 @@ public class Train extends Observable  implements Runnable{
     private static Integer dellay;
     private static Integer disToNotificate;
     private static Integer distBetweenCities;
+
     private ArrayList<Wagon> wagons;
     private ArrayList<Platform> platforms;
     private Train nextTrain;
