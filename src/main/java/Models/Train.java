@@ -15,8 +15,8 @@ public class Train extends Observable  implements Runnable{
     private static Integer dellay;
     private static Integer disToNotificate;
     private static Integer distBetweenCities;
+    private ArrayList<Wagon> wagons;
     private ArrayList<Platform> platforms;
-    private LinkedList<Person> personsOnTrain;
     private Train nextTrain;
     private Integer currSpeed;
     private Integer numberOfWagons;
@@ -25,6 +25,24 @@ public class Train extends Observable  implements Runnable{
     private Boolean canMove;
     private Boolean onStation;
     private Platform nextPlatform;
+
+
+    public Boolean getOnStation() {
+        return onStation;
+    }
+
+    public void setOnStation(Boolean onStation) {
+        this.onStation = onStation;
+    }
+
+    public ArrayList<Wagon> getWagons() {
+        return wagons;
+    }
+
+    public void setWagons(ArrayList<Wagon> wagons) {
+        this.wagons = wagons;
+    }
+
     public void run() {
         int i=0;
         while (true) {

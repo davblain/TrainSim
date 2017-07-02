@@ -12,10 +12,32 @@ public class City implements Runnable {
 
     public void run() {
         while (true) {
-            personsInCity.stream().filter(Person::getWant).forEach(p -> platform.getPersonsOnPlatform().add(p));
+
+            personsInCity.stream().filter(Person::getWant).forEach(p -> {
+                platform.getPersonsOnPlatform().add(p);
+                personsInCity.remove(p);
+            }
+            );
             if(condition()) break;
         }
     }
+
+    public ConcurrentLinkedQueue<Person> getPersonsInCity() {
+        return personsInCity;
+    }
+
+    public void setPersonsInCity(ConcurrentLinkedQueue<Person> personsInCity) {
+        this.personsInCity = personsInCity;
+    }
+
+    public Platform getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(Platform platform) {
+        this.platform = platform;
+    }
+
     private boolean condition()
     {
         return true;
