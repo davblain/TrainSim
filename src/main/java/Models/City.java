@@ -1,13 +1,14 @@
 package Models;
 
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by Gemini on 01.07.2017.
  */
 public class City implements Runnable {
     private Platform platform;
-    private LinkedList<Person> personsInCity;
+    private ConcurrentLinkedQueue<Person> personsInCity;
 
     public void run() {
         while (true) {

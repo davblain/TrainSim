@@ -13,7 +13,7 @@ public class Simulation implements Runnable{
     private ArrayList<City> Cities;
     private ArrayList<Train> Trains;
     Simulation(Integer dist,Integer personNumber, Integer platformCapacity,Integer numberOfTrains,Integer numberOfOutputs,Integer Speed,
-    Integer wagonsCapacity,Integer acceleration,Integer notificationDist,Integer maxDist,Integer stopTime,Integer dellay) {
+    Integer wagonsCapacity,Integer acceleration,Integer notificationDist,Integer minDist,Integer stopTime,Integer dellay) {
 
     }
     public void run() {
