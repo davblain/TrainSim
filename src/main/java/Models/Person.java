@@ -15,6 +15,11 @@ public class Person {
     private Integer unloadingDellay;
     private ArrayList<City> cities;
 
+    public Person(City currCity,ArrayList<City> cities) {
+        this.currCity = currCity;
+        this.cities = cities;
+    }
+
     public ArrayList<City> getCities() {
         return cities;
     }
@@ -43,6 +48,7 @@ public class Person {
 
 
     }
+
     public void setLoadingDellay(Integer loadingDellay) {
         this.loadingDellay = loadingDellay;
     }

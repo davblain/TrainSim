@@ -3,22 +3,25 @@ package Models;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by gemini on 02.07.17.
  */
 
 public class Wagon {
-    static private int capacity;
-    static private int length;
-    static private int numberOfOutputs;
+    private int capacity;
+    private int length;
+    private int numberOfOutputs;
     private Boolean status = false;
-    private ConcurrentLinkedQueue<Person> personsInWagon;
+    private LinkedBlockingQueue<Person> personsInWagon;
     private ExecutorService  executorService = Executors.newFixedThreadPool(numberOfOutputs);
 
 
-    public Wagon(ConcurrentLinkedQueue<Person> personsInWagon) {
-        this.personsInWagon = personsInWagon;
+    public Wagon(int capacity, int numberOfOutputs) {
+        this.capacity = capacity;
+        this.numberOfOutputs = numberOfOutputs;
+        personsInWagon = new LinkedBlockingQueue<>(capacity);
     }
 
     public Boolean getStatus() {
@@ -58,38 +61,34 @@ public class Wagon {
         executorService.shutdown();
 
     }
-    public static int getCapacity() {
+    public  int getCapacity() {
         return capacity;
     }
     boolean getCapability(Person person)
     {
         return true;
     }
-    public static void setCapacity(int capacity) {
-        Wagon.capacity = capacity;
-    }
-
-    public static int getLength() {
+    public  int getLength() {
         return length;
     }
 
-    public static void setLength(int length) {
-        Wagon.length = length;
+    public void setLength(int length) {
+        this.length = length;
     }
 
-    public static int getNumberOfOutputs() {
+    public int getNumberOfOutputs() {
         return numberOfOutputs;
     }
 
-    public static void setNumberOfOutputs(int numberOfOutputs) {
-        Wagon.numberOfOutputs = numberOfOutputs;
+    public void setNumberOfOutputs(int numberOfOutputs) {
+        this.numberOfOutputs = numberOfOutputs;
     }
 
-    public ConcurrentLinkedQueue<Person> getPersonsInWagon() {
+    public LinkedBlockingQueue<Person> getPersonsInWagon() {
         return personsInWagon;
     }
 
-    public void setPersonsInWagon(ConcurrentLinkedQueue<Person> personsInWagon) {
+    public void setPersonsInWagon(LinkedBlockingQueue<Person> personsInWagon) {
         this.personsInWagon = personsInWagon;
     }
 

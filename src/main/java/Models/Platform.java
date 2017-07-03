@@ -4,26 +4,29 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * Created by Gemini on 01.07.2017.
  */
 public class Platform  implements Observer {
     private ExecutorService executor;
-    private static int capacity;
-    private ConcurrentLinkedQueue<Person> personsOnPlatform;
+    private int capacity;
+    private LinkedBlockingQueue<Person> personsOnPlatform;
     private int length;
     private Train currTrain;
     private City city;
-    public ConcurrentLinkedQueue<Person> getPersonsOnPlatform() {
+    public LinkedBlockingQueue<Person> getPersonsOnPlatform() {
         return personsOnPlatform;
     }
-    public void setPersonsOnPlatform(ConcurrentLinkedQueue<Person> personsOnPlatform) {
+    public void setPersonsOnPlatform(LinkedBlockingQueue<Person> personsOnPlatform) {
         this.personsOnPlatform = personsOnPlatform;
+    }
+
+    public Platform(int capacity, City city) {
+        this.capacity = capacity;
+        this.city = city;
+        personsOnPlatform = new LinkedBlockingQueue<>(capacity);
     }
 
     @Override
