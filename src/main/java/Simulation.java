@@ -1,5 +1,6 @@
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -10,7 +11,7 @@ public class Simulation implements Runnable{
     Configuration conf;
     Simulation(Configuration conf) {
         this.conf = conf;
-
+        service = Executors.newFixedThreadPool(conf.getCities().size() + conf.getTrains().size());
     }
     public void run() {
 

@@ -1,9 +1,6 @@
 package Models;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
 /**
  * Created by gemini on 02.07.17.
@@ -15,13 +12,17 @@ public class Wagon {
     private int numberOfOutputs;
     private Boolean status = false;
     private LinkedBlockingQueue<Person> personsInWagon;
-    private ExecutorService  executorService = Executors.newFixedThreadPool(numberOfOutputs);
+    private ExecutorService  executorService ;
+    private TimeUnit unit;
+    private long tic;
 
-
-    public Wagon(int capacity, int numberOfOutputs) {
+    public Wagon(int capacity, int numberOfOutputs, TimeUnit unit ,long tic ) {
         this.capacity = capacity;
         this.numberOfOutputs = numberOfOutputs;
         personsInWagon = new LinkedBlockingQueue<>(capacity);
+        executorService =  Executors.newFixedThreadPool(numberOfOutputs);
+        this.unit = unit;
+        this.tic = tic;
     }
 
     public Boolean getStatus() {
@@ -41,7 +42,7 @@ public class Wagon {
                     person.setCurrCity(city);
                     personsInWagon.remove(person);
                     try {
-                        Thread.sleep(person.getLoadingDellay());
+                        unit.sleep(person.getUnloadingDellay()*tic);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -54,6 +55,11 @@ public class Wagon {
                 if (personsInWagon.size()< capacity) {
                     personsInWagon.add(person);
                     platform.getPersonsOnPlatform().remove(person);
+                    try {
+                        unit.sleep(person.getLoadingDellay()*tic);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }));

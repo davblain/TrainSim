@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Gemini on 01.07.2017.
@@ -15,17 +16,20 @@ public class Train extends Observable  implements Runnable{
     private  Integer dellay;
     private  Integer disToNotificate;
     private  Integer distBetweenCities;
-
+    private TimeUnit unit;
+    private  long tic;
     private ArrayList<Wagon> wagons;
     private ArrayList<Platform> platforms;
     private Train nextTrain;
     private Integer currSpeed;
     private Integer allDist ;
-    private Integer distToNextCity ;
+    private Integer currDistToNextCity ;
     private Boolean onStation;
     private Platform nextPlatform;
 
-    public Train(Integer minDist, Integer speed, Integer acceleration, Integer dellay, Integer disToNotificate, Integer distBetweenCities,Integer numberOfWagons ,Integer wagonCapacity,Integer numberOfOutputs, ArrayList<Platform> platforms) {
+    public Train(Integer minDist, Integer speed, Integer acceleration, Integer dellay, Integer disToNotificate, Integer distBetweenCities,
+                 Integer numberOfWagons ,Integer wagonCapacity,Integer numberOfOutputs, ArrayList<Platform> platforms,TimeUnit unit, long tic) {
+        super();
         this.minDist = minDist;
         this.speed = speed;
         this.acceleration = acceleration;
@@ -36,8 +40,10 @@ public class Train extends Observable  implements Runnable{
         allDist = 0;
         wagons = new ArrayList<>(numberOfWagons);
         for (int i = 0; i <numberOfWagons ; i++) {
-            wagons.add(new Wagon(wagonCapacity,numberOfOutputs));
+            wagons.add(new Wagon(wagonCapacity,numberOfOutputs,unit,tic));
         }
+        this.tic = tic;
+        this.unit = unit;
     }
 
     public Train getNextTrain() {
@@ -68,7 +74,7 @@ public class Train extends Observable  implements Runnable{
         int i=0;
 
         while (true) {
-            distToNextCity = distBetweenCities;
+            currDistToNextCity = distBetweenCities;
             nextPlatform = platforms.get(i%platforms.size());
             addObserver(nextPlatform);
             currSpeed = 0;
@@ -77,26 +83,22 @@ public class Train extends Observable  implements Runnable{
                 if (!(nextTrain.onStation && distToNextTrain < disToNotificate) && getDistToNextTrain() > minDist ) {
                     if (currSpeed<speed) currSpeed+=acceleration; else currSpeed=speed;
                     allDist += currSpeed;
-                    if (distToNextCity < 0) {
+                    if (currDistToNextCity <= 0) {
                         notifyObservers();
                         while (onStation) {
-                            try {
-                                Thread.sleep(15);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+
                         }
                         i++;
                         deleteObserver(nextPlatform);
                         break;
                     }
-                    distToNextCity-=currSpeed;
-
+                    currDistToNextCity-=currSpeed;
+                    allDist += currSpeed;
                 } else { // кейс с близким расстоянием до следующего поезда
                     currSpeed = 0;
                     if (getDistToNextTrain() < minDist) {
                         try {
-                            Thread.sleep(dellay);
+                            unit.sleep(tic * dellay );
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

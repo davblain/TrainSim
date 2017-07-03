@@ -2,41 +2,40 @@ package Models;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by Gemini on 01.07.2017.
  */
-public class City implements Runnable {
+public class City implements Observer {
     private Platform platform;
     private ConcurrentLinkedQueue<Person> personsInCity;
     private static long currTimeOfDay;
     private static long dayDuration;
 
-    public City(int numberOfPersons, int platformCapacity, ArrayList<City> cities) {
+    public City(int numberOfPersons, int platformCapacity, ArrayList<City> cities,long loadingDellay, long unloadingDellay) {
         personsInCity = new ConcurrentLinkedQueue<>();
         cities.add(this);
         for (int i = 0; i < numberOfPersons ; i++) {
-            personsInCity.add(new Person(this,cities));
+            personsInCity.add(new Person(this,cities,loadingDellay,unloadingDellay));
         }
         platform = new Platform(platformCapacity,this);
 
     }
 
-    public void run() {
-        currTimeOfDay = 0;
-        while (true) {
+    @Override
+    public void update(Observable o, Object arg) {
+        personsInCity.forEach(Person::setRandom);
+        personsInCity.stream().filter(Person::getWant).forEach(p -> {
+            platform.getPersonsOnPlatform().add(p);
+            personsInCity.remove(p);
+        });
 
-           personsInCity.forEach(Person::setRandom);
-            personsInCity.stream().filter(Person::getWant).forEach(p -> {
-                platform.getPersonsOnPlatform().add(p);
-                personsInCity.remove(p);
-            });
-
-
-            if(condition()) break;
-        }
     }
+
+
 
     public ConcurrentLinkedQueue<Person> getPersonsInCity() {
         return personsInCity;

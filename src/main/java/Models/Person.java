@@ -11,13 +11,16 @@ public class Person {
     private Boolean Want;
     private City currCity;
     private City nextCity;
-    private Integer loadingDellay;
-    private Integer unloadingDellay;
+    private long loadingDellay;
+    private long unloadingDellay;
     private ArrayList<City> cities;
 
-    public Person(City currCity,ArrayList<City> cities) {
+    public Person(City currCity,ArrayList<City> cities, long loadingDellay,long unloadingDellay) {
         this.currCity = currCity;
         this.cities = cities;
+        this.loadingDellay = loadingDellay;
+        this.unloadingDellay = unloadingDellay;
+
     }
 
     public ArrayList<City> getCities() {
@@ -28,7 +31,7 @@ public class Person {
         this.cities = cities;
     }
 
-    public Integer getLoadingDellay() {
+    public long getLoadingDellay() {
         return loadingDellay;
     }
     public void setRandom() {
@@ -36,7 +39,7 @@ public class Person {
         if (random.nextFloat()<0.5){
             Want = true;
             City randomCity = cities.get(random.nextInt(cities.size()));
-            while (randomCity==currCity) {
+            while (randomCity == currCity) {
                 randomCity = cities.get(random.nextInt(cities.size()));
             }
             nextCity = cities.get(random.nextInt(cities.size()));
@@ -53,7 +56,7 @@ public class Person {
         this.loadingDellay = loadingDellay;
     }
 
-    public Integer getUnloadingDellay() {
+    public long getUnloadingDellay() {
         return unloadingDellay;
     }
 
