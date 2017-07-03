@@ -11,7 +11,7 @@ public class Simulation implements Runnable{
     Configuration conf;
     Simulation(Configuration conf) {
         this.conf = conf;
-        service = Executors.newFixedThreadPool(conf.getCities().size() + conf.getTrains().size());
+        service = Executors.newFixedThreadPool(conf.getTrains().size()+1);
     }
     public void run() {
 
