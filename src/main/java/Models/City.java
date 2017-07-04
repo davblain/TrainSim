@@ -29,8 +29,12 @@ public class City implements Observer {
     public void update(Observable o, Object arg) {
         personsInCity.forEach(Person::setRandom);
         personsInCity.stream().filter(Person::getWant).forEach(p -> {
-            platform.getPersonsOnPlatform().add(p);
-            personsInCity.remove(p);
+            if (platform.getPersonsOnPlatform().size()< platform.getCapacity()) {
+                platform.getPersonsOnPlatform().add(p);
+                personsInCity.remove(p);
+            }
+
+
         });
 
     }

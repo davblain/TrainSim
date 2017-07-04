@@ -1,4 +1,6 @@
 
+import Models.Train;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,6 +16,9 @@ public class Simulation implements Runnable{
         service = Executors.newFixedThreadPool(conf.getTrains().size()+1);
     }
     public void run() {
-
+        service.submit(conf.getTimeService());
+        for (Train train:conf.getTrains()) {
+            service.submit(train);
+        }
     }
 }

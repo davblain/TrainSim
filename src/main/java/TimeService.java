@@ -41,6 +41,7 @@ public class TimeService extends Observable implements Runnable {
                 e.printStackTrace();
             }
             timeOfSimulation++;
+            //System.out.println(timeOfSimulation);
         }
 
 

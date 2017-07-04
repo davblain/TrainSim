@@ -26,7 +26,9 @@ public class Train extends Observable  implements Runnable{
     private Integer currDistToNextCity ;
     private Boolean onStation;
     private Platform nextPlatform;
-
+    long timeOnCurrPlatform; //время проведеннное на текущей платформе
+    long timeOnAllPlatforms; //время проведенное на всех платформах
+    long downTime;// Общее время  простоя при встерече / оповещении о стоячем поезде на станции;
     public Train(Integer minDist, Integer speed, Integer acceleration, Integer dellay, Integer disToNotificate, Integer distBetweenCities,
                  Integer numberOfWagons ,Integer wagonCapacity,Integer numberOfOutputs, ArrayList<Platform> platforms,TimeUnit unit, long tic) {
         super();
@@ -44,6 +46,8 @@ public class Train extends Observable  implements Runnable{
         }
         this.tic = tic;
         this.unit = unit;
+        this.timeOnAllPlatforms = 0;
+        this.downTime = 0;
     }
 
     public Train getNextTrain() {
@@ -74,6 +78,7 @@ public class Train extends Observable  implements Runnable{
         int i=0;
 
         while (true) {
+            timeOnCurrPlatform = 0;
             currDistToNextCity = distBetweenCities;
             nextPlatform = platforms.get(i%platforms.size());
             addObserver(nextPlatform);
@@ -86,7 +91,13 @@ public class Train extends Observable  implements Runnable{
                     if (currDistToNextCity <= 0) {
                         notifyObservers();
                         while (onStation) {
-
+                            try {
+                                unit.sleep(tic);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            timeOnCurrPlatform++;
+                            timeOnAllPlatforms++;
                         }
                         i++;
                         deleteObserver(nextPlatform);
@@ -99,11 +110,20 @@ public class Train extends Observable  implements Runnable{
                     if (getDistToNextTrain() < minDist) {
                         try {
                             unit.sleep(tic * dellay );
+                            downTime += dellay;
+                            continue;
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        downTime++;
 
                     }
+
+                }
+                try { // всегда, когда поезд не на платформе
+                    unit.sleep(tic);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
 
 
@@ -119,5 +139,11 @@ public class Train extends Observable  implements Runnable{
     }
     private Integer getDistToNextTrain() {
         return nextTrain.allDist - allDist;
+    }
+    public void resetDownTime()  {
+        downTime = 0 ;
+    }
+    public void resetTimeOnAllPlatforms() {
+        timeOnAllPlatforms = 0;
     }
 }

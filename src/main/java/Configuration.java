@@ -13,6 +13,11 @@ public class Configuration {
     private ArrayList<City> cities;
     private ArrayList<Train> trains;
     private TimeService timeService;
+
+    public TimeService getTimeService() {
+        return timeService;
+    }
+
     public ArrayList<City> getCities() {
         return cities;
     }

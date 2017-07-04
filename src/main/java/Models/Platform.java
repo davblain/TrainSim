@@ -29,6 +29,10 @@ public class Platform  implements Observer {
         personsOnPlatform = new LinkedBlockingQueue<>(capacity);
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         currTrain = (Train) o;
